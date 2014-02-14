@@ -33,7 +33,7 @@ public class BlockView {
 
     private int[] buffers;
     private Context mContext;
-
+    private float height = 10.0f;
     public BlockView(Context context) {
         mContext = context;
         mVertexBuffer = makeFloatBuffer(vertices);
@@ -77,5 +77,16 @@ public class BlockView {
         gl.glColor4f(1, 0, 0, 1);
         mIndexBuffer.position(14);
         gl.glDrawElements(GL10.GL_TRIANGLE_STRIP, 4, GL10.GL_UNSIGNED_BYTE, mIndexBuffer);
+    }
+
+    /** ブロックを上から下に落とす */
+    public float blockDrop() {
+        if (height < -15.0f) {
+            return height;
+        } else {
+            height--;
+            return height;
+        }
+
     }
 }

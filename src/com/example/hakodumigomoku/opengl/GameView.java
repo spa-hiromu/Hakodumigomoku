@@ -16,17 +16,15 @@ public class GameView implements Renderer, OnTouchListener {
     private GL10 mGl;
     private int[] block_position;
     private static final int ALL_TURN = 100;
-    BlockView[] cube;
+    BlockView cube;
     private Context mContext;
     private float aspect; // アスペクト比
     private int angle; // 回転角度
+    private float height = 10;
 
     public GameView(Context context) {
         mContext = context;
-        cube = new BlockView[ALL_TURN];
-        for (int i = 0; i < cube.length; i++) {
-            cube[i] = new BlockView(context);
-        }
+        cube = new BlockView(mContext);
         initStage();
     }
 
@@ -64,9 +62,12 @@ public class GameView implements Renderer, OnTouchListener {
 
         /** モデル変換 */
         gl.glRotatef(angle, 0, 1, 0);
-
+        /** モデルの縮小 */
+        gl.glScalef(0.1f, 0.1f, 0.1f);
+        /** モデルの移動 */
+        gl.glTranslatef(0f, cube.blockDrop(), 0f);
         /** ボックスの描画 */
-        new BlockView(mContext).draw(gl);
+        cube.draw(gl);
     }
 
     @Override
