@@ -9,6 +9,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 import android.opengl.GLU;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -19,15 +20,13 @@ public class GameView implements Renderer, OnTouchListener {
     private static final int ALL_TURN = 100;
     BlockView[] cube;
     private Context mContext;
-    private ArrayList<BlockView> blockList;
 
     public GameView(Context context) {
         mContext = context;
-        blockList = new ArrayList();
-        // cube = new BlockView[ALL_TURN];
-        // for (int i = 0; i < cube.length; i++) {
-        // cube[i] = new BlockView(context);
-        // }
+        cube = new BlockView[ALL_TURN];
+        for (int i = 0; i < cube.length; i++) {
+            cube[i] = new BlockView(context);
+        }
         initStage();
     }
 
@@ -49,16 +48,14 @@ public class GameView implements Renderer, OnTouchListener {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        mGl = gl;
+
         // cube[now_turn].border_Xpoint = (float) now_turn +
         // BlockView.CUBE_EDGE;
         // オブジェクトの傾きを指定する
         gl.glRotatef(10f, 0, 1, 0);
-        if (blockList != null) {
-            for (BlockView block : blockList) {
-                block.draw(gl);
-            }
-        }
+        cube[0].draw(gl);
+        gl.glTranslatef(5, 0, 0);
+        cube[1].draw(gl);
         // new BlockView(mContext).draw(gl);
 
     }
@@ -88,17 +85,19 @@ public class GameView implements Renderer, OnTouchListener {
     }
 
     public ArrayList<BlockView> getBlockList() {
-        return blockList;
+        return null;
     }
 
     public void addBlockList() {
-        blockList.add(new BlockView(mContext));
+
+        Log.d("addBlockList", "add");
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             addBlockList();
+            Log.d("touch", "touch");
             return true;
         } else {
             return false;

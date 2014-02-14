@@ -72,13 +72,23 @@ public class BlockView {
         border_Ypoint = 1.0f;
         height_rate = 0.1f;
         // pTexture = loadTexture(R.drawable.circle);
-        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        mVertexBuffer = vbb.asFloatBuffer();
-        mVertexBuffer.put(vertices);
-        mVertexBuffer.position(0);
+
+        mVertexBuffer = makeFloatBuffer(vertices);
     }
 
+    /**
+     * 受け取った配列をバッファに書き直す
+     * 
+     * @param array
+     * @return
+     */
+    private FloatBuffer makeFloatBuffer(float[] array) {
+        FloatBuffer fb = ByteBuffer.allocateDirect(array.length * 4).order(ByteOrder.nativeOrder())
+                .asFloatBuffer();
+        fb.put(array).position(0);
+        return fb;
+
+    }
 
     public void draw(GL10 gl) {
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
