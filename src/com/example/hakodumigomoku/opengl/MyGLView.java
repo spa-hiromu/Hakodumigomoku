@@ -12,6 +12,7 @@ public class MyGLView extends GLSurfaceView{
         super(context);
         my_renderer = new GameView(context);
         setRenderer(my_renderer);
+        this.setOnTouchListener(my_renderer);
 //        setRenderMode(RENDERMODE_WHEN_DIRTY);
     }
 
