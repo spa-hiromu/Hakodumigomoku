@@ -1,8 +1,6 @@
 
 package com.example.hakodumigomoku.opengl;
 
-import java.util.ArrayList;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -20,6 +18,8 @@ public class GameView implements Renderer, OnTouchListener {
     private static final int ALL_TURN = 100;
     BlockView[] cube;
     private Context mContext;
+    private float aspect; // アスペクト比
+    private int angle; // 回転角度
 
     public GameView(Context context) {
         mContext = context;
@@ -48,56 +48,48 @@ public class GameView implements Renderer, OnTouchListener {
 
     @Override
     public void onDrawFrame(GL10 gl) {
+        /** 画面のクリア */
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-        // cube[now_turn].border_Xpoint = (float) now_turn +
-        // BlockView.CUBE_EDGE;
-        // オブジェクトの傾きを指定する
-        gl.glRotatef(10f, 0, 1, 0);
-        cube[0].draw(gl);
-        gl.glTranslatef(5, 0, 0);
-        cube[1].draw(gl);
-        // new BlockView(mContext).draw(gl);
+        /** 射影変換 */
+        gl.glMatrixMode(GL10.GL_PROJECTION);
+        gl.glLoadIdentity();
+        GLU.gluPerspective(gl, 45.0f, aspect, 0.01f, 100.0f);
 
+        /** ビュー変換 */
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
+        gl.glLoadIdentity();
+        GLU.gluLookAt(gl, 0, 0.5f, 5.0f, 0, 0, 0.0f, 0.0f, 1.0f, 0.0f);
+
+        /** モデル変換 */
+        gl.glRotatef(angle, 0, 1, 0);
+
+        /** ボックスの描画 */
+        new BlockView(mContext).draw(gl);
     }
 
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
+        // ビューポート変換
         gl.glViewport(0, 0, width, height);
-        gl.glMatrixMode(GL10.GL_PROJECTION);
-        gl.glLoadIdentity();
-        GLU.gluPerspective(gl, 45f, (float) width / height, 1f, 50f);
+        aspect = (float) width / (float) height;
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        // 頂点配列の有効化
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+        // デプステストの有効化
         gl.glEnable(GL10.GL_DEPTH_TEST);
-        gl.glEnable(GL10.GL_CULL_FACE);
-        gl.glDepthFunc(GL10.GL_LEQUAL);
-        gl.glEnable(GL10.GL_TEXTURE_2D);
-        gl.glClearDepthf(1.0f);
 
-        // シェーディング
-        gl.glShadeModel(GL10.GL_SMOOTH);
-        // ライティング
-        // gl.glEnable(GL10.GL_LIGHTING);
-        // gl.glEnable(GL10.GL_LIGHT0);
-    }
-
-    public ArrayList<BlockView> getBlockList() {
-        return null;
-    }
-
-    public void addBlockList() {
-
-        Log.d("addBlockList", "add");
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            addBlockList();
             Log.d("touch", "touch");
+            angle++;
             return true;
         } else {
             return false;
