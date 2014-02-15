@@ -1,5 +1,6 @@
 package com.example.hakodumigomoku;
 
+import hakodumigomoku.plane.Game2DActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -14,14 +15,18 @@ public class MainActivity extends BaseActivity implements OnClickListener {
  * @author HiromuYoshiwara
  */
 
-    Button battle_button;//対人対戦モードを呼び出すボタン
+    Button plane_button;// 2dゲームモードを呼び出すボタン
+    Button gl_button;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        battle_button=(Button)findViewById(R.id.buttle_button);
+        plane_button = (Button) findViewById(R.id.plane_button);
+        gl_button = (Button) findViewById(R.id.gl_button);
+        
 
-        battle_button.setOnClickListener(this);
+        plane_button.setOnClickListener(this);
+        gl_button.setOnClickListener(this);
     }
 
     @Override
@@ -33,9 +38,13 @@ public class MainActivity extends BaseActivity implements OnClickListener {
 
     @Override
     public void onClick(View v) {
+        if (v == gl_button) {
         Intent battleintent = new Intent(MainActivity.this, GameActivity.class);
             startActivity(battleintent);
-            
+        } else if (v == plane_button) {
+            Intent mIntent = new Intent(MainActivity.this, Game2DActivity.class);
+            startActivity(mIntent);
+        }
 
     }
 

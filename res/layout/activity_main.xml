@@ -9,12 +9,21 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/buttle_button"
+        android:id="@+id/gl_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="126dp"
+        android:text="@string/gl_button" />
+
+    <Button
+        android:id="@+id/plane_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="76dp"
-        android:text="@string/buttle_button" />
+        android:text="@string/plane_button" />
 
 </RelativeLayout>
